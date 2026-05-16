@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <title>Kettlebell Focus</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Mark’s kettlebell PWA</p>
+        <h1>Kettlebell Focus</h1>
+      </div>
+      <div class="status" id="status">Ready</div>
+    </header>
+
+    <section id="setup" class="card setup">
+      <h2>Today’s session</h2>
+      <p class="muted">Generate a 20-ish minute circuit, run it in focus mode, then copy the summary for logging.</p>
+      <div class="button-row">
+        <button id="generateBtn" class="primary">Generate today’s session</button>
+        <select id="programSelect" aria-label="Choose program">
+          <option value="">Pick manually…</option>
+        </select>
+      </div>
+      <div id="sessionPreview" class="preview"></div>
+      <div class="button-row hidden" id="startRow">
+        <button id="startBtn" class="primary">Start focus mode</button>
+        <button id="resetChoiceBtn" class="secondary">Clear</button>
+      </div>
+    </section>
+
+    <section id="workout" class="card workout hidden">
+      <div class="workout-header">
+        <div>
+          <p class="eyebrow" id="stepLabel">Exercise</p>
+          <h2 id="exerciseName">Swings</h2>
+        </div>
+        <div class="phase" id="phaseLabel">WORK</div>
+      </div>
+
+      <div class="timer" id="timer">45</div>
+      <div class="details" id="exerciseDetails"></div>
+      <div class="progress" id="progressText"></div>
+
+      <div class="button-row controls">
+        <button id="pauseBtn" class="secondary">Pause</button>
+        <button id="nextBtn" class="primary">Done / next</button>
+      </div>
+      <button id="abortBtn" class="ghost">End early and summarize</button>
+    </section>
+
+    <section id="summary" class="card summary hidden">
+      <h2>Session summary</h2>
+      <p class="muted">Copy this summary for your workout log.</p>
+      <textarea id="summaryText" readonly></textarea>
+      <div class="button-row">
+        <button id="copyBtn" class="primary">Copy summary</button>
+        <button id="newSessionBtn" class="secondary">New session</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

@@ -2,6 +2,7 @@ const WORK_SECONDS = 45;
 const TRANSITION_SECONDS = 15;
 const ROUND_REST_SECONDS = 60;
 const HISTORY_KEY = 'kbFocusHistory';
+const VOICE_KEY = 'kbFocusVoice';
 
 const programs = [
   {
@@ -82,13 +83,15 @@ let interval = null;
 let paused = false;
 let wakeLock = null;
 let session = null;
+let voiceEnabled = localStorage.getItem(VOICE_KEY) !== 'off';
+let lastSpokenSecond = null;
 
 const els = {
   status: $('status'), setup: $('setup'), workout: $('workout'), summary: $('summary'),
   generateBtn: $('generateBtn'), programSelect: $('programSelect'), preview: $('sessionPreview'), startRow: $('startRow'),
   startBtn: $('startBtn'), resetChoiceBtn: $('resetChoiceBtn'), stepLabel: $('stepLabel'), exerciseName: $('exerciseName'),
   phaseLabel: $('phaseLabel'), timer: $('timer'), exerciseDetails: $('exerciseDetails'), progressText: $('progressText'),
-  pauseBtn: $('pauseBtn'), nextBtn: $('nextBtn'), abortBtn: $('abortBtn'), summaryText: $('summaryText'), copyBtn: $('copyBtn'), newSessionBtn: $('newSessionBtn')
+  pauseBtn: $('pauseBtn'), voiceBtn: $('voiceBtn'), nextBtn: $('nextBtn'), abortBtn: $('abortBtn'), summaryText: $('summaryText'), copyBtn: $('copyBtn'), newSessionBtn: $('newSessionBtn')
 };
 
 init();
@@ -100,11 +103,13 @@ function init() {
   els.startBtn.addEventListener('click', startWorkout);
   els.resetChoiceBtn.addEventListener('click', clearChoice);
   els.pauseBtn.addEventListener('click', togglePause);
+  els.voiceBtn.addEventListener('click', toggleVoice);
   els.nextBtn.addEventListener('click', advanceStep);
   els.abortBtn.addEventListener('click', () => finishWorkout(true));
   els.copyBtn.addEventListener('click', copySummary);
   els.newSessionBtn.addEventListener('click', newSession);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') requestWakeLock(); });
+  updateVoiceButton();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => setStatus('Offline cache unavailable'));
 }
 
@@ -183,6 +188,7 @@ function showStep() {
   if (!step) return finishWorkout(false);
   secondsLeft = step.seconds;
   const isWork = step.type === 'work';
+  lastSpokenSecond = null;
   els.stepLabel.textContent = step.label;
   els.exerciseName.textContent = isWork ? step.exercise.name : step.type === 'roundRest' ? 'Rest' : 'Transition';
   els.exerciseDetails.textContent = isWork ? `${step.exercise.reps} · ${step.exercise.weight}` : step.type === 'roundRest' ? '1 minute. Breathe. Do not negotiate with the bell.' : 'Set up the next movement.';
@@ -191,6 +197,7 @@ function showStep() {
   els.progressText.textContent = `${currentIndex + 1} / ${steps.length}`;
   renderTimer();
   logEvent('step_start', step);
+  speakStep(step);
 }
 
 function startTimer() {
@@ -201,6 +208,7 @@ function startTimer() {
     if (paused) return;
     secondsLeft -= 1;
     renderTimer();
+    maybeSpeakCountdown();
     if (secondsLeft <= 0) advanceStep(true);
   }, 1000);
 }
@@ -219,6 +227,20 @@ function togglePause() {
   paused = !paused;
   els.pauseBtn.textContent = paused ? 'Resume' : 'Pause';
   logEvent(paused ? 'pause' : 'resume', steps[currentIndex]);
+  speak(paused ? 'Paused' : 'Resume');
+}
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  localStorage.setItem(VOICE_KEY, voiceEnabled ? 'on' : 'off');
+  updateVoiceButton();
+  speak(voiceEnabled ? 'Voice guidance on' : '');
+}
+
+function updateVoiceButton() {
+  if (!els.voiceBtn) return;
+  els.voiceBtn.textContent = voiceEnabled ? 'Voice on' : 'Voice off';
+  els.voiceBtn.setAttribute('aria-pressed', String(voiceEnabled));
 }
 
 function finishWorkout(early) {
@@ -226,6 +248,7 @@ function finishWorkout(early) {
   if (!session) return;
   session.endedAt = new Date();
   session.completed = !early;
+  window.speechSynthesis?.cancel?.();
   releaseWakeLock();
   addHistory({ programId: session.program.id, date: isoDate(session.startedAt) });
   els.workout.classList.add('hidden');
@@ -310,6 +333,49 @@ function addHistory(item) {
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
 }
 function setStatus(text) { els.status.textContent = text; }
+
+function speakStep(step) {
+  if (step.type === 'work') {
+    const e = step.exercise;
+    speak(`${step.label}. ${cleanSpeech(e.name)}. ${e.reps}. ${cleanSpeech(e.weight)}.`);
+  } else if (step.type === 'roundRest') {
+    speak(`${step.label}. Rest one minute.`);
+  } else {
+    const next = steps[currentIndex + 1];
+    if (next?.type === 'work') speak(`Transition. Next: ${cleanSpeech(next.exercise.name)}.`);
+    else speak('Transition.');
+  }
+}
+
+function maybeSpeakCountdown() {
+  if (!voiceEnabled) return;
+  if ([10, 5, 3, 2, 1].includes(secondsLeft) && secondsLeft !== lastSpokenSecond) {
+    lastSpokenSecond = secondsLeft;
+    speak(String(secondsLeft), true);
+  }
+}
+
+function speak(text, interrupt = false) {
+  if (!voiceEnabled || !text || !('speechSynthesis' in window)) return;
+  if (interrupt) window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1.02;
+  utterance.pitch = 0.92;
+  utterance.volume = 1;
+  const voices = window.speechSynthesis.getVoices?.() || [];
+  const preferred = voices.find(v => /en-GB|en_US|en-US/.test(v.lang)) || voices[0];
+  if (preferred) utterance.voice = preferred;
+  window.speechSynthesis.speak(utterance);
+}
+
+function cleanSpeech(text) {
+  return String(text)
+    .replace(/—/g, ' ')
+    .replace(/\bBW\b/g, 'bodyweight')
+    .replace(/\+/g, ' plus ')
+    .replace(/kg/g, ' kilograms')
+    .replace(/:/g, '.');
+}
 
 async function requestWakeLock() {
   if (!('wakeLock' in navigator)) { setStatus('Wake lock unsupported'); return; }

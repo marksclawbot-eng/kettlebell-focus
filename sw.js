@@ -1,9 +1,9 @@
-const CACHE = 'kb-focus-v3';
+const CACHE = 'kb-focus-v4';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=2026-05-18-images-v3',
-  './app.js?v=2026-05-18-images-v3',
+  './styles.css?v=2026-05-18-pace-voice-v4',
+  './app.js?v=2026-05-18-pace-voice-v4',
   './manifest.webmanifest',
   './icons/icon-192.svg',
   './icons/icon-512.svg',

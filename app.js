@@ -4,7 +4,7 @@ const ROUND_REST_SECONDS = 60;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-05-18-images-v3';
+const APP_VERSION = '2026-05-18-pace-voice-v4';
 
 const exerciseImages = {
   swing: './assets/01_swing_focus.jpg',
@@ -113,7 +113,6 @@ let currentIndex = 0;
 let secondsLeft = WORK_SECONDS;
 let interval = null;
 let paused = false;
-let awaitingNext = false;
 let wakeLock = null;
 let session = null;
 let voiceEnabled = localStorage.getItem(VOICE_KEY) !== 'off';
@@ -222,7 +221,6 @@ function showStep() {
   if (!step) return finishWorkout(false);
   secondsLeft = step.seconds;
   const isWork = step.type === 'work';
-  awaitingNext = false;
   lastSpokenSecond = null;
   els.stepLabel.textContent = step.label;
   els.exerciseName.textContent = isWork ? step.exercise.name : step.type === 'roundRest' ? 'Rest' : 'Transition';
@@ -231,7 +229,7 @@ function showStep() {
   els.phaseLabel.textContent = isWork ? 'WORK' : 'REST';
   els.phaseLabel.classList.toggle('rest', !isWork);
   els.progressText.textContent = `${currentIndex + 1} / ${steps.length}`;
-  els.nextBtn.textContent = isWork ? 'Done / start rest' : currentIndex === steps.length - 1 ? 'Finish' : 'Skip rest / next';
+  els.nextBtn.textContent = currentIndex === steps.length - 1 ? 'Finish' : 'Skip / next';
   els.pauseBtn.disabled = false;
   renderTimer();
   logEvent('step_start', step);
@@ -241,36 +239,17 @@ function showStep() {
 function startTimer() {
   clearInterval(interval);
   paused = false;
-  awaitingNext = false;
   els.pauseBtn.textContent = 'Pause';
   interval = setInterval(() => {
-    if (paused || awaitingNext) return;
+    if (paused) return;
     secondsLeft -= 1;
     renderTimer();
     maybeSpeakCountdown();
-    if (secondsLeft <= 0) {
-      const step = steps[currentIndex];
-      if (step?.type === 'work') waitForRestStart();
-      else advanceStep(true);
-    }
+    if (secondsLeft <= 0) advanceStep(true);
   }, 1000);
 }
 
 function renderTimer() { els.timer.textContent = String(Math.max(0, secondsLeft)); }
-
-function waitForRestStart() {
-  const step = steps[currentIndex];
-  awaitingNext = true;
-  clearInterval(interval);
-  interval = null;
-  secondsLeft = 0;
-  renderTimer();
-  els.nextBtn.textContent = currentIndex === steps.length - 1 ? 'Finish' : 'Start rest';
-  els.pauseBtn.disabled = true;
-  setStatus('Work done — click Next to start rest');
-  logEvent('work_timer_done_waiting', step);
-  speak('Work done. Click next for rest.', true);
-}
 
 function advanceStep(auto = false) {
   const step = steps[currentIndex];
@@ -278,7 +257,6 @@ function advanceStep(auto = false) {
   currentIndex += 1;
   if (currentIndex >= steps.length) return finishWorkout(false);
   showStep();
-  if (!interval) startTimer();
 }
 
 function togglePause() {
@@ -336,7 +314,7 @@ function makeSummary(s, early) {
     roundStarts[r] ||= new Date(e.time);
     roundEnds[r] = new Date(e.time);
   }
-  const doneEvents = s.events.filter(e => e.event.includes('done'));
+  const doneEvents = s.events.filter(e => e.event.includes('done') && e.step?.type === 'work');
   for (const e of doneEvents) {
     const r = e.step?.round == null ? null : String(e.step.round);
     if (r) roundEnds[r] = new Date(e.time);
@@ -406,14 +384,13 @@ function setStatus(text) { els.status.textContent = text; }
 
 function speakStep(step) {
   if (step.type === 'work') {
-    const e = step.exercise;
-    speak(`${step.label}. ${cleanSpeech(e.name)}. ${e.reps}. ${cleanSpeech(e.weight)}.`);
+    speak(`${cleanSpeech(step.exercise.name)}. ${step.seconds} seconds.`);
   } else if (step.type === 'roundRest') {
-    speak(`${step.label}. Rest one minute.`);
+    speak(`Rest. ${step.seconds} seconds.`);
   } else {
     const next = steps[currentIndex + 1];
-    if (next?.type === 'work') speak(`Transition. Next: ${cleanSpeech(next.exercise.name)}.`);
-    else speak('Transition.');
+    if (next?.type === 'work') speak(`Rest. ${step.seconds} seconds. Next: ${cleanSpeech(next.exercise.name)}.`);
+    else speak(`Rest. ${step.seconds} seconds.`);
   }
 }
 

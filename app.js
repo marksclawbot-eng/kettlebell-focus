@@ -4,6 +4,20 @@ const ROUND_REST_SECONDS = 60;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
+const exerciseImages = [
+  [/swing/i, './assets/01_swing_focus.jpg'],
+  [/halo/i, './assets/11_halos_focus.jpg'],
+  [/around|figure 8/i, './assets/08_around_the_world_focus.jpg'],
+  [/clean & jerk|press/i, './assets/03_press_focus.jpg'],
+  [/clean|rack/i, './assets/02_rack_focus.jpg'],
+  [/snatch|overhead/i, './assets/09_overhead_hold_focus.jpg'],
+  [/deadlift/i, './assets/05_deadlift_focus.jpg'],
+  [/squat/i, './assets/06_goblet_squat_focus.jpg'],
+  [/renegade|push-up|pushup/i, './assets/07_renegade_row_focus.jpg'],
+  [/row/i, './assets/10_bent_over_row_focus.jpg'],
+  [/windmill/i, './assets/04_windmill_focus.jpg']
+];
+
 const programs = [
   {
     id: 'full_circuit',
@@ -81,6 +95,7 @@ let currentIndex = 0;
 let secondsLeft = WORK_SECONDS;
 let interval = null;
 let paused = false;
+let awaitingNext = false;
 let wakeLock = null;
 let session = null;
 let voiceEnabled = localStorage.getItem(VOICE_KEY) !== 'off';
@@ -89,7 +104,7 @@ let lastSpokenSecond = null;
 const els = {
   status: $('status'), setup: $('setup'), workout: $('workout'), summary: $('summary'),
   generateBtn: $('generateBtn'), programSelect: $('programSelect'), preview: $('sessionPreview'), startRow: $('startRow'),
-  startBtn: $('startBtn'), resetChoiceBtn: $('resetChoiceBtn'), stepLabel: $('stepLabel'), exerciseName: $('exerciseName'),
+  startBtn: $('startBtn'), resetChoiceBtn: $('resetChoiceBtn'), stepLabel: $('stepLabel'), exerciseName: $('exerciseName'), exerciseArt: $('exerciseArt'), exerciseImage: $('exerciseImage'),
   phaseLabel: $('phaseLabel'), timer: $('timer'), exerciseDetails: $('exerciseDetails'), progressText: $('progressText'),
   pauseBtn: $('pauseBtn'), voiceBtn: $('voiceBtn'), nextBtn: $('nextBtn'), abortBtn: $('abortBtn'), summaryText: $('summaryText'), copyBtn: $('copyBtn'), newSessionBtn: $('newSessionBtn')
 };
@@ -188,13 +203,17 @@ function showStep() {
   if (!step) return finishWorkout(false);
   secondsLeft = step.seconds;
   const isWork = step.type === 'work';
+  awaitingNext = false;
   lastSpokenSecond = null;
   els.stepLabel.textContent = step.label;
   els.exerciseName.textContent = isWork ? step.exercise.name : step.type === 'roundRest' ? 'Rest' : 'Transition';
   els.exerciseDetails.textContent = isWork ? `${step.exercise.reps} · ${step.exercise.weight}` : step.type === 'roundRest' ? '1 minute. Breathe. Do not negotiate with the bell.' : 'Set up the next movement.';
+  updateExerciseImage(step);
   els.phaseLabel.textContent = isWork ? 'WORK' : 'REST';
   els.phaseLabel.classList.toggle('rest', !isWork);
   els.progressText.textContent = `${currentIndex + 1} / ${steps.length}`;
+  els.nextBtn.textContent = isWork ? 'Done / start rest' : currentIndex === steps.length - 1 ? 'Finish' : 'Skip rest / next';
+  els.pauseBtn.disabled = false;
   renderTimer();
   logEvent('step_start', step);
   speakStep(step);
@@ -203,17 +222,36 @@ function showStep() {
 function startTimer() {
   clearInterval(interval);
   paused = false;
+  awaitingNext = false;
   els.pauseBtn.textContent = 'Pause';
   interval = setInterval(() => {
-    if (paused) return;
+    if (paused || awaitingNext) return;
     secondsLeft -= 1;
     renderTimer();
     maybeSpeakCountdown();
-    if (secondsLeft <= 0) advanceStep(true);
+    if (secondsLeft <= 0) {
+      const step = steps[currentIndex];
+      if (step?.type === 'work') waitForRestStart();
+      else advanceStep(true);
+    }
   }, 1000);
 }
 
 function renderTimer() { els.timer.textContent = String(Math.max(0, secondsLeft)); }
+
+function waitForRestStart() {
+  const step = steps[currentIndex];
+  awaitingNext = true;
+  clearInterval(interval);
+  interval = null;
+  secondsLeft = 0;
+  renderTimer();
+  els.nextBtn.textContent = currentIndex === steps.length - 1 ? 'Finish' : 'Start rest';
+  els.pauseBtn.disabled = true;
+  setStatus('Work done — click Next to start rest');
+  logEvent('work_timer_done_waiting', step);
+  speak('Work done. Click next for rest.', true);
+}
 
 function advanceStep(auto = false) {
   const step = steps[currentIndex];
@@ -221,6 +259,7 @@ function advanceStep(auto = false) {
   currentIndex += 1;
   if (currentIndex >= steps.length) return finishWorkout(false);
   showStep();
+  if (!interval) startTimer();
 }
 
 function togglePause() {
@@ -235,6 +274,21 @@ function toggleVoice() {
   localStorage.setItem(VOICE_KEY, voiceEnabled ? 'on' : 'off');
   updateVoiceButton();
   speak(voiceEnabled ? 'Voice guidance on' : '');
+}
+
+function updateExerciseImage(step) {
+  if (!els.exerciseImage || !els.exerciseArt) return;
+  const nextWork = step.type === 'work' ? step : steps.slice(currentIndex + 1).find(s => s.type === 'work');
+  const name = nextWork?.exercise?.name || '';
+  const match = exerciseImages.find(([pattern]) => pattern.test(name));
+  if (!match) {
+    els.exerciseArt.classList.add('hidden');
+    els.exerciseImage.removeAttribute('src');
+    return;
+  }
+  els.exerciseImage.src = match[1];
+  els.exerciseImage.alt = name;
+  els.exerciseArt.classList.remove('hidden');
 }
 
 function updateVoiceButton() {

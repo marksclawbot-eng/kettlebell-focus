@@ -1,5 +1,25 @@
-const CACHE = 'kb-focus-v1';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest', './icons/icon-192.svg', './icons/icon-512.svg'];
+const CACHE = 'kb-focus-v2';
+const ASSETS = [
+  './',
+  './index.html',
+  './styles.css',
+  './app.js',
+  './manifest.webmanifest',
+  './icons/icon-192.svg',
+  './icons/icon-512.svg',
+  './assets/01_swing_focus.jpg',
+  './assets/02_rack_focus.jpg',
+  './assets/03_press_focus.jpg',
+  './assets/04_windmill_focus.jpg',
+  './assets/05_deadlift_focus.jpg',
+  './assets/06_goblet_squat_focus.jpg',
+  './assets/07_renegade_row_focus.jpg',
+  './assets/08_around_the_world_focus.jpg',
+  './assets/09_overhead_hold_focus.jpg',
+  './assets/10_bent_over_row_focus.jpg',
+  './assets/11_halos_focus.jpg',
+  './assets/README.md'
+];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

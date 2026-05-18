@@ -29,6 +29,7 @@ h2 { font-size: clamp(1.45rem, 5vw, 2.3rem); letter-spacing: -0.04em; margin-bot
 button, select { border: 0; border-radius: 16px; padding: 15px 18px; color: var(--text); min-height: 54px; }
 button { cursor: pointer; font-weight: 800; }
 button:active { transform: translateY(1px); }
+button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 .primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #111827; }
 .secondary, select { background: var(--card-2); border: 1px solid var(--line); }
 .ghost { width: 100%; margin-top: 14px; background: transparent; border: 1px solid var(--line); color: var(--muted); }
@@ -41,7 +42,9 @@ button:active { transform: translateY(1px); }
 .workout-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .phase { color: #111827; background: var(--good); border: 0; font-weight: 900; }
 .phase.rest { background: #60a5fa; }
-.timer { font-variant-numeric: tabular-nums; font-size: clamp(7rem, 34vw, 16rem); font-weight: 950; letter-spacing: -0.09em; text-align: center; line-height: .85; margin: 28px 0; }
+.exercise-art { margin: 16px auto 4px; width: min(100%, 440px); aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; border: 1px solid var(--line); background: rgba(0,0,0,.18); }
+.exercise-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.timer { font-variant-numeric: tabular-nums; font-size: clamp(5.5rem, 28vw, 13rem); font-weight: 950; letter-spacing: -0.09em; text-align: center; line-height: .85; margin: 20px 0; }
 .details { text-align: center; font-size: clamp(1.3rem, 6vw, 2.2rem); color: var(--muted); line-height: 1.3; }
 .progress { text-align: center; color: var(--muted); margin-top: 18px; }
 .controls button { flex: 1; font-size: 1.08rem; }

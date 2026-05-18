@@ -18,3 +18,9 @@ This folder is intended to be served by GitHub Pages from `docs/`.
 The app path is `/kettlebell/` relative to the Pages site root.
 
 No secrets, accounts, or backend calls are used.
+
+## Updates
+
+- Focus mode displays cropped local exercise illustrations from `assets/`.
+- Work intervals stop at 0 and wait for a manual Next/Start rest click.
+- Rest and transition intervals still auto-advance to the next exercise.

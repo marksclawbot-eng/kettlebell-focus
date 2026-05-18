@@ -1,9 +1,9 @@
-const CACHE = 'kb-focus-v2';
+const CACHE = 'kb-focus-v3';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css',
-  './app.js',
+  './styles.css?v=2026-05-18-images-v3',
+  './app.js?v=2026-05-18-images-v3',
   './manifest.webmanifest',
   './icons/icon-192.svg',
   './icons/icon-512.svg',
@@ -17,8 +17,7 @@ const ASSETS = [
   './assets/08_around_the_world_focus.jpg',
   './assets/09_overhead_hold_focus.jpg',
   './assets/10_bent_over_row_focus.jpg',
-  './assets/11_halos_focus.jpg',
-  './assets/README.md'
+  './assets/11_halos_focus.jpg'
 ];
 
 self.addEventListener('install', event => {

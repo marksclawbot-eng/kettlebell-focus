@@ -4,19 +4,37 @@ const ROUND_REST_SECONDS = 60;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const exerciseImages = [
-  [/swing/i, './assets/01_swing_focus.jpg'],
-  [/halo/i, './assets/11_halos_focus.jpg'],
-  [/around|figure 8/i, './assets/08_around_the_world_focus.jpg'],
-  [/clean & jerk|press/i, './assets/03_press_focus.jpg'],
-  [/clean|rack/i, './assets/02_rack_focus.jpg'],
-  [/snatch|overhead/i, './assets/09_overhead_hold_focus.jpg'],
-  [/deadlift/i, './assets/05_deadlift_focus.jpg'],
-  [/squat/i, './assets/06_goblet_squat_focus.jpg'],
-  [/renegade|push-up|pushup/i, './assets/07_renegade_row_focus.jpg'],
-  [/row/i, './assets/10_bent_over_row_focus.jpg'],
-  [/windmill/i, './assets/04_windmill_focus.jpg']
-];
+const APP_VERSION = '2026-05-18-images-v3';
+
+const exerciseImages = {
+  swing: './assets/01_swing_focus.jpg',
+  rack: './assets/02_rack_focus.jpg',
+  press: './assets/03_press_focus.jpg',
+  windmill: './assets/04_windmill_focus.jpg',
+  deadlift: './assets/05_deadlift_focus.jpg',
+  squat: './assets/06_goblet_squat_focus.jpg',
+  renegade: './assets/07_renegade_row_focus.jpg',
+  around: './assets/08_around_the_world_focus.jpg',
+  overhead: './assets/09_overhead_hold_focus.jpg',
+  row: './assets/10_bent_over_row_focus.jpg',
+  halo: './assets/11_halos_focus.jpg'
+};
+
+function imageForExercise(name) {
+  const n = String(name || '').toLowerCase();
+  if (n.includes('halo')) return exerciseImages.halo;
+  if (n.includes('windmill')) return exerciseImages.windmill;
+  if (n.includes('deadlift')) return exerciseImages.deadlift;
+  if (n.includes('squat')) return exerciseImages.squat;
+  if (n.includes('renegade') || n.includes('push-up') || n.includes('pushup')) return exerciseImages.renegade;
+  if (n.includes('row')) return exerciseImages.row;
+  if (n.includes('around') || n.includes('figure 8')) return exerciseImages.around;
+  if (n.includes('snatch') || n.includes('overhead')) return exerciseImages.overhead;
+  if (n.includes('clean & jerk') || n.includes('press')) return exerciseImages.press;
+  if (n.includes('clean') || n.includes('rack')) return exerciseImages.rack;
+  if (n.includes('swing')) return exerciseImages.swing;
+  return exerciseImages.swing;
+}
 
 const programs = [
   {
@@ -112,6 +130,7 @@ const els = {
 init();
 
 function init() {
+  document.documentElement.dataset.version = APP_VERSION;
   populateSelect();
   els.generateBtn.addEventListener('click', () => chooseProgram());
   els.programSelect.addEventListener('change', e => selectProgram(e.target.value));
@@ -278,16 +297,13 @@ function toggleVoice() {
 
 function updateExerciseImage(step) {
   if (!els.exerciseImage || !els.exerciseArt) return;
-  const nextWork = step.type === 'work' ? step : steps.slice(currentIndex + 1).find(s => s.type === 'work');
-  const name = nextWork?.exercise?.name || '';
-  const match = exerciseImages.find(([pattern]) => pattern.test(name));
-  if (!match) {
-    els.exerciseArt.classList.add('hidden');
-    els.exerciseImage.removeAttribute('src');
-    return;
-  }
-  els.exerciseImage.src = match[1];
+  const activeWork = step.type === 'work' ? step : null;
+  const upcomingWork = activeWork || steps.slice(currentIndex + 1).find(s => s.type === 'work');
+  const name = upcomingWork?.exercise?.name || 'Kettlebell exercise';
+  const src = imageForExercise(name);
+  els.exerciseImage.src = src;
   els.exerciseImage.alt = name;
+  els.exerciseArt.classList.toggle('rest-preview', !activeWork);
   els.exerciseArt.classList.remove('hidden');
 }
 

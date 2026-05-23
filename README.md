@@ -11,6 +11,7 @@ Static offline workout timer for Mark's kettlebell sessions.
 - Attempts to keep the screen awake via the Wake Lock API.
 - Optional voice guidance using browser text-to-speech.
 - Records tap/timer timings and produces a copyable workout summary.
+- Pause freezes the exercise countdown while elapsed session time keeps running, so summaries include pauses.
 
 ## Deployment
 

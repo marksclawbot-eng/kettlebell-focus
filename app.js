@@ -4,7 +4,7 @@ const ROUND_REST_SECONDS = 60;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-05-18-pace-voice-v4';
+const APP_VERSION = '2026-05-23-pause-elapsed-v5';
 
 const exerciseImages = {
   swing: './assets/01_swing_focus.jpg',
@@ -122,7 +122,7 @@ const els = {
   status: $('status'), setup: $('setup'), workout: $('workout'), summary: $('summary'),
   generateBtn: $('generateBtn'), programSelect: $('programSelect'), preview: $('sessionPreview'), startRow: $('startRow'),
   startBtn: $('startBtn'), resetChoiceBtn: $('resetChoiceBtn'), stepLabel: $('stepLabel'), exerciseName: $('exerciseName'), exerciseArt: $('exerciseArt'), exerciseImage: $('exerciseImage'),
-  phaseLabel: $('phaseLabel'), timer: $('timer'), exerciseDetails: $('exerciseDetails'), progressText: $('progressText'),
+  phaseLabel: $('phaseLabel'), timer: $('timer'), elapsedTimer: $('elapsedTimer'), exerciseDetails: $('exerciseDetails'), progressText: $('progressText'),
   pauseBtn: $('pauseBtn'), voiceBtn: $('voiceBtn'), nextBtn: $('nextBtn'), abortBtn: $('abortBtn'), summaryText: $('summaryText'), copyBtn: $('copyBtn'), newSessionBtn: $('newSessionBtn')
 };
 
@@ -232,6 +232,7 @@ function showStep() {
   els.nextBtn.textContent = currentIndex === steps.length - 1 ? 'Finish' : 'Skip / next';
   els.pauseBtn.disabled = false;
   renderTimer();
+  renderElapsedTimer();
   logEvent('step_start', step);
   speakStep(step);
 }
@@ -241,6 +242,7 @@ function startTimer() {
   paused = false;
   els.pauseBtn.textContent = 'Pause';
   interval = setInterval(() => {
+    renderElapsedTimer();
     if (paused) return;
     secondsLeft -= 1;
     renderTimer();
@@ -250,6 +252,10 @@ function startTimer() {
 }
 
 function renderTimer() { els.timer.textContent = String(Math.max(0, secondsLeft)); }
+function renderElapsedTimer() {
+  if (!els.elapsedTimer || !session?.startedAt) return;
+  els.elapsedTimer.textContent = `Elapsed ${duration(session.startedAt, new Date())}`;
+}
 
 function advanceStep(auto = false) {
   const step = steps[currentIndex];
@@ -263,6 +269,8 @@ function togglePause() {
   paused = !paused;
   els.pauseBtn.textContent = paused ? 'Resume' : 'Pause';
   logEvent(paused ? 'pause' : 'resume', steps[currentIndex]);
+  renderElapsedTimer();
+  setStatus(paused ? 'Paused — elapsed time still running' : 'Resumed');
   speak(paused ? 'Paused' : 'Resume');
 }
 
@@ -321,6 +329,8 @@ function makeSummary(s, early) {
   }
   const rounds = Object.keys(roundStarts).map(r => `- ${r === 'Finisher' ? 'Finisher' : `Round ${r}`}: ${duration(roundStarts[r], roundEnds[r] || s.endedAt)}`);
   const weights = uniqueExercises(s.program).map(e => `${e.name}: ${e.weight}`).join('; ');
+  const pauseDuration = totalPauseDuration(s);
+  const pauseLine = pauseDuration ? `Pauses: ${pauseDuration} included in elapsed timings` : null;
   return [
     'Kettlebell session done',
     `Date: ${isoDate(s.startedAt)}`,
@@ -328,11 +338,26 @@ function makeSummary(s, early) {
     `Status: ${early ? 'ended early' : 'completed'}`,
     `Rounds: ${s.program.rounds}${s.program.finisher ? ' + finisher' : ''}`,
     `Total elapsed: ${duration(s.startedAt, s.endedAt)}`,
+    pauseLine,
     'Timing:',
     ...rounds,
     `Weights: ${weights}`,
     'Notes: no issues reported'
-  ].join('\n');
+  ].filter(Boolean).join('\n');
+}
+
+function totalPauseDuration(s) {
+  let total = 0;
+  let pauseStart = null;
+  for (const e of s.events || []) {
+    if (e.event === 'pause') pauseStart = new Date(e.time);
+    if (e.event === 'resume' && pauseStart) {
+      total += Math.max(0, new Date(e.time) - pauseStart);
+      pauseStart = null;
+    }
+  }
+  if (pauseStart) total += Math.max(0, new Date(s.endedAt || new Date()) - pauseStart);
+  return total ? duration(0, total) : '';
 }
 
 function uniqueExercises(program) {

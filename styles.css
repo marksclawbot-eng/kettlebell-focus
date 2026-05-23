@@ -46,6 +46,7 @@ button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 .exercise-art img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 .exercise-art.rest-preview { opacity: .7; filter: saturate(.8); }
 .timer { font-variant-numeric: tabular-nums; font-size: clamp(5.5rem, 28vw, 13rem); font-weight: 950; letter-spacing: -0.09em; text-align: center; line-height: .85; margin: 20px 0; }
+.elapsed { text-align: center; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 800; margin: -8px 0 16px; }
 .details { text-align: center; font-size: clamp(1.3rem, 6vw, 2.2rem); color: var(--muted); line-height: 1.3; }
 .progress { text-align: center; color: var(--muted); margin-top: 18px; }
 .controls button { flex: 1; font-size: 1.08rem; }

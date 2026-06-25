@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-06-25-prep-compact-v1';
+const APP_VERSION = '2026-06-25-no-progress-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -150,7 +150,7 @@ const els = {
   status: $('status'), setup: $('setup'), workout: $('workout'), summary: $('summary'),
   generateBtn: $('generateBtn'), programSelect: $('programSelect'), preview: $('sessionPreview'), startRow: $('startRow'),
   startBtn: $('startBtn'), resetChoiceBtn: $('resetChoiceBtn'), stepLabel: $('stepLabel'), exerciseName: $('exerciseName'), exerciseArt: $('exerciseArt'), exerciseImage: $('exerciseImage'),
-  phaseLabel: $('phaseLabel'), timer: $('timer'), elapsedTimer: $('elapsedTimer'), exerciseDetails: $('exerciseDetails'), progressText: $('progressText'),
+  phaseLabel: $('phaseLabel'), timer: $('timer'), elapsedTimer: $('elapsedTimer'), exerciseDetails: $('exerciseDetails'),
   pauseBtn: $('pauseBtn'), voiceBtn: $('voiceBtn'), nextBtn: $('nextBtn'), abortBtn: $('abortBtn'), summaryText: $('summaryText'), copyBtn: $('copyBtn'), newSessionBtn: $('newSessionBtn')
 };
 
@@ -262,7 +262,6 @@ function showStep() {
   els.phaseLabel.textContent = isWork ? 'WORK' : isPrep ? 'STARTING' : 'REST';
   els.phaseLabel.classList.toggle('rest', !isWork && !isPrep);
   els.phaseLabel.classList.toggle('prep', isPrep);
-  els.progressText.textContent = isPrep ? 'Starting in 5' : `${currentIndex} / ${steps.length - 1}`;
   els.nextBtn.textContent = isWork ? 'Done / start rest' : isPrep ? 'Skip countdown' : currentIndex === steps.length - 1 ? 'Finish' : 'Skip rest / next';
   els.pauseBtn.disabled = isPrep;
   renderTimer();

@@ -53,7 +53,6 @@ body.is-working .workout { padding: 12px; }
 .timer { font-variant-numeric: tabular-nums; font-size: clamp(4.8rem, 24vw, 10rem); font-weight: 950; letter-spacing: -0.09em; text-align: center; line-height: .82; margin: 8px 0 4px; }
 .elapsed { text-align: center; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 800; margin: 0 0 6px; }
 .details { text-align: center; font-size: clamp(1.05rem, 4.8vw, 1.75rem); color: var(--muted); line-height: 1.22; }
-.progress { text-align: center; color: var(--muted); margin-top: 6px; }
 .controls { margin-top: 8px; }
 .controls button { flex: 1; font-size: 1rem; }
 body.is-working .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 8px; }

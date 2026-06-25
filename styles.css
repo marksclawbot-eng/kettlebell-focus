@@ -56,6 +56,10 @@ body.is-working .workout { padding: 12px; }
 .progress { text-align: center; color: var(--muted); margin-top: 6px; }
 .controls { margin-top: 8px; }
 .controls button { flex: 1; font-size: 1rem; }
+body.is-working .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 8px; }
+body.is-working .controls button { width: 100%; min-height: 64px; padding: 12px 10px; border-radius: 18px; font-size: 1.02rem; line-height: 1.08; display: flex; align-items: center; justify-content: center; text-align: center; }
+body.is-working .controls .primary { grid-row: span 2; min-height: 138px; font-size: 1.14rem; }
+body.is-working .controls .ghost { margin-top: 0; }
 .summary textarea { width: 100%; min-height: 360px; border-radius: 18px; padding: 16px; background: rgba(0,0,0,.26); border: 1px solid var(--line); color: var(--text); line-height: 1.45; resize: vertical; }
 @media (display-mode: standalone) { body { user-select: none; } textarea { user-select: text; } }
 
@@ -66,5 +70,8 @@ body.is-working .workout { padding: 12px; }
   .exercise-art { max-height: 20svh; width: min(100%, 300px); }
   .timer { font-size: clamp(4.2rem, 22vw, 8rem); margin: 4px 0 2px; }
   button, select { min-height: 46px; padding: 11px 14px; border-radius: 14px; }
+  body.is-working .controls { gap: 8px; margin-top: 6px; }
+  body.is-working .controls button { min-height: 58px; padding: 10px 8px; border-radius: 16px; font-size: .98rem; }
+  body.is-working .controls .primary { min-height: 124px; font-size: 1.08rem; }
   .ghost { margin-top: 8px; }
 }

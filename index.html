@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#111827" />
   <title>Kettlebell Focus</title>
   <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="stylesheet" href="./styles.css?v=2026-05-23-pause-elapsed-v5" />
+  <link rel="stylesheet" href="./styles.css?v=2026-06-25-heatmap-pwa" />
 </head>
 <body>
   <main class="app">
@@ -21,6 +21,7 @@
     <section id="setup" class="card setup">
       <h2>Today’s session</h2>
       <p class="muted">Generate a 20-ish minute circuit, run it in focus mode, then copy the summary for logging.</p>
+      <p class="heatmap-link"><a href="./heatmap.html">View session heat map</a></p>
       <div class="button-row">
         <button id="generateBtn" class="primary">Generate today’s session</button>
         <select id="programSelect" aria-label="Choose program">
@@ -63,6 +64,7 @@
     <section id="summary" class="card summary hidden">
       <h2>Session summary</h2>
       <p class="muted">Copy this summary for your workout log.</p>
+      <p class="heatmap-link"><a href="./heatmap.html">View updated session heat map</a></p>
       <textarea id="summaryText" readonly></textarea>
       <div class="button-row">
         <button id="copyBtn" class="primary">Copy summary</button>
@@ -71,6 +73,6 @@
     </section>
   </main>
 
-  <script src="./app.js?v=2026-05-23-pause-elapsed-v5" defer></script>
+  <script src="./app.js?v=2026-06-25-heatmap-pwa" defer></script>
 </body>
 </html>

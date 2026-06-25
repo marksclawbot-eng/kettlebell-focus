@@ -1,106 +1,133 @@
 const WORK_SECONDS = 45;
 const TRANSITION_SECONDS = 15;
 const ROUND_REST_SECONDS = 60;
+const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-05-23-pause-elapsed-v5';
+const APP_VERSION = '2026-06-25-prep-compact-v1';
 
-const exerciseImages = {
-  swing: './assets/01_swing_focus.jpg',
-  rack: './assets/02_rack_focus.jpg',
-  press: './assets/03_press_focus.jpg',
-  windmill: './assets/04_windmill_focus.jpg',
-  deadlift: './assets/05_deadlift_focus.jpg',
-  squat: './assets/06_goblet_squat_focus.jpg',
-  renegade: './assets/07_renegade_row_focus.jpg',
-  around: './assets/08_around_the_world_focus.jpg',
-  overhead: './assets/09_overhead_hold_focus.jpg',
-  row: './assets/10_bent_over_row_focus.jpg',
-  halo: './assets/11_halos_focus.jpg'
-};
-
-function imageForExercise(name) {
-  const n = String(name || '').toLowerCase();
-  if (n.includes('halo')) return exerciseImages.halo;
-  if (n.includes('windmill')) return exerciseImages.windmill;
-  if (n.includes('deadlift')) return exerciseImages.deadlift;
-  if (n.includes('squat')) return exerciseImages.squat;
-  if (n.includes('renegade') || n.includes('push-up') || n.includes('pushup')) return exerciseImages.renegade;
-  if (n.includes('row')) return exerciseImages.row;
-  if (n.includes('around') || n.includes('figure 8')) return exerciseImages.around;
-  if (n.includes('snatch') || n.includes('overhead')) return exerciseImages.overhead;
-  if (n.includes('clean & jerk') || n.includes('press')) return exerciseImages.press;
-  if (n.includes('clean') || n.includes('rack')) return exerciseImages.rack;
-  if (n.includes('swing')) return exerciseImages.swing;
-  return exerciseImages.swing;
-}
+const exerciseImages = [
+  [/swing/i, './assets/01_swing_focus.jpg'],
+  [/around|halo|figure 8/i, './assets/08_around_the_world_focus.jpg'],
+  [/clean & jerk|press/i, './assets/03_press_focus.jpg'],
+  [/clean|rack/i, './assets/02_rack_focus.jpg'],
+  [/snatch|overhead/i, './assets/09_overhead_hold_focus.jpg'],
+  [/deadlift/i, './assets/05_deadlift_focus.jpg'],
+  [/squat/i, './assets/06_goblet_squat_focus.jpg'],
+  [/renegade|push-up|pushup/i, './assets/07_renegade_row_focus.jpg'],
+  [/row/i, './assets/10_bent_over_row_focus.jpg'],
+  [/windmill/i, './assets/04_windmill_focus.jpg']
+];
 
 const programs = [
   {
-    id: 'full_circuit',
-    name: 'Full Body Circuit',
-    focus: 'Broad full-body flow',
+    id: 'balanced_full_body',
+    name: 'Balanced Full Body',
+    focus: 'Broad default full-body session without stacking grip or hinge',
     rounds: 2,
     exercises: [
-      ex('Swings', '20-25', '24kg'),
-      ex('Around the Worlds', '10 each direction', '24kg'),
-      ex('Cleans — right', '15', '20kg'),
-      ex('Cleans — left', '15', '20kg'),
-      ex('Halos', '12 alternating', '20kg'),
-      ex('Clean & Jerk — left', '12', '16kg'),
-      ex('Clean & Jerk — right', '12', '16kg'),
-      ex('Figure 8s', '16 alternating', '20kg'),
-      ex('Snatches — left', '16', '16kg'),
-      ex('Snatches — right', '16', '16kg')
+      ex('Swings', '18-22', '24kg'),
+      ex('Push-ups', '12-15', 'BW'),
+      ex('Single-arm row — left', '10-12', '20kg volume / 24kg strength'),
+      ex('Single-arm row — right', '10-12', '20kg volume / 24kg strength'),
+      ex('Goblet squats', '10-12, knee-friendly depth', '20kg'),
+      ex('Deadlifts / KB deadlifts', '8-10 controlled', '44kg'),
+      ex('Clean & Jerk — left', '8-10 crisp reps', '20kg'),
+      ex('Clean & Jerk — right', '8-10 crisp reps', '20kg'),
+      ex('Windmills', '4-5 each side, slow', '16kg'),
+      ex('Figure 8s', '12-16 alternating, easy rhythm', '20kg')
     ]
   },
   {
-    id: 'push_pull',
-    name: 'Push & Pull',
-    focus: 'Balanced push, pull, squat and ballistic work',
+    id: 'back_sparing_upper_core',
+    name: 'Back-Sparing Upper + Core',
+    focus: 'Low hinge, low knee stress; recovery-compatible upper/core work',
     rounds: 2,
     exercises: [
-      ex('Swings', '20-25', '24kg'),
-      ex('Single-arm Rows — left', '12', '20kg'),
-      ex('Single-arm Rows — right', '12', '20kg'),
-      ex('Clean & Jerk — left', '12', '16kg'),
-      ex('Clean & Jerk — right', '12', '16kg'),
-      ex('Around the Worlds', '10 each direction', '24kg'),
-      ex('Goblet Squats', '14', '20kg'),
-      ex('Halos', '12 alternating', '20kg'),
-      ex('Figure 8s', '16 alternating', '20kg'),
-      ex('Push-ups', '15', 'BW')
+      ex('Push-ups', '12-15', 'BW'),
+      ex('Half-kneeling press — left', '8-10', '16kg'),
+      ex('Half-kneeling press — right', '8-10', '16kg'),
+      ex('Supported single-arm row — left', '10-12', '20kg'),
+      ex('Supported single-arm row — right', '10-12', '20kg'),
+      ex('Helicopters', '30-40 sec controlled', '12kg'),
+      ex('Pullovers', '10-12', '16kg'),
+      ex('Halos', '10 alternating', '20kg'),
+      ex('Windmills', '4-5 each side, slow', '16kg'),
+      ex('Goblet squats', '8-10 controlled', '20kg')
     ]
   },
   {
-    id: 'snatch_ballistic',
-    name: 'Snatch & Ballistic',
-    focus: 'Power, speed and ballistic movement',
+    id: 'controlled_ballistic',
+    name: 'Controlled Ballistic',
+    focus: 'Power work with capped back and hand fatigue',
     rounds: 3,
     exercises: [
-      ex('Swings', '20-25', '24kg'),
-      ex('Snatches — left', '14', '16kg'),
-      ex('Snatches — right', '14', '16kg'),
-      ex('Around the Worlds', '10 each direction', '24kg'),
-      ex('Cleans — left', '12', '20kg'),
-      ex('Cleans — right', '12', '20kg')
-    ]
-  },
-  {
-    id: 'press_focus',
-    name: 'Auxiliary Kettlebell Circuit',
-    focus: 'Less-used movements and balancing work',
-    rounds: 3,
-    exercises: [
-      ex('Swings', '20-25', '24kg'),
-      ex('Dual kettlebell cleans', '8-10', '16kg + 16kg'),
-      ex('Deadlifts', '10', '44kg (24kg + 20kg)'),
-      ex('Renegade rows', '6 each side', '16kg + 16kg'),
-      ex('Windmills — alternating', '5 each side', '16kg'),
-      ex('Push-ups', '12-15', 'BW')
+      ex('Swings', '18-22, not max reps', '24kg'),
+      ex('Push-ups', '12-15', 'BW'),
+      ex('Snatches — left', '10-12', '16kg'),
+      ex('Snatches — right', '10-12', '16kg'),
+      ex('Halos', '10 alternating', '20kg'),
+      ex('Goblet squats', '8-10, knee-friendly depth', '20kg')
     ],
-    finisher: [ex('Finisher: Swings', '20-25', '24kg'), ex('Finisher: Push-ups', '12-15', 'BW')]
+    finisher: [
+      ex('Around the Worlds', 'easy controlled rhythm', '20-24kg'),
+      ex('Goblet squats', '8-10 controlled', '20kg')
+    ]
+  },
+  {
+    id: 'knee_cautious_legs_core',
+    name: 'Knee-Cautious Legs + Core',
+    focus: 'Legs without making knees or low back the tax collector',
+    rounds: 2,
+    exercises: [
+      ex('Light technique swings', '15-18 crisp reps', '16-20kg'),
+      ex('Kettlebell racked lunge — left', '5-7', '16kg'),
+      ex('Kettlebell racked lunge — right', '5-7', '16kg'),
+      ex('Helicopters', '30-40 sec controlled', '12kg'),
+      ex('Supported single-arm row — left', '10-12', '20kg'),
+      ex('Supported single-arm row — right', '10-12', '20kg'),
+      ex('Helicopters', '30-40 sec controlled', '12kg'),
+      ex('Halos', '10 alternating', '20kg'),
+      ex('Windmills', '4-5 each side, slow', '16kg'),
+      ex('Figure 8s', '12-16 alternating, easy rhythm', '16-20kg')
+    ]
+  },
+  {
+    id: 'strength_bias_capped',
+    name: 'Strength Bias, Capped',
+    focus: 'Heavier strength exposure without enough hinge density to wreck the back',
+    rounds: 3,
+    exercises: [
+      ex('Deadlifts / KB deadlifts', '8-10 controlled', '44kg'),
+      ex('Push-ups', '12-15', 'BW'),
+      ex('Goblet squats', '8-10, knee-friendly depth', '20kg'),
+      ex('Dual kettlebell cleans', '6-8 crisp', '16kg + 16kg'),
+      ex('Renegade rows', '4-6 each side, strict', '16kg + 16kg'),
+      ex('Figure 8s', '12-16 alternating, easy rhythm', '16-20kg')
+    ],
+    finisher: [
+      ex('Helicopters', '30-40 sec relaxed', '12kg'),
+      ex('Goblet squats', '8-10 controlled', '20kg')
+    ]
+  },
+  {
+    id: 'athletic_power_capped',
+    name: 'Athletic Power, Capped',
+    focus: 'Hardest athletic option; use when back, knees and hands feel good',
+    rounds: 2,
+    exercises: [
+      ex('Swings', '18-22', '24kg'),
+      ex('Pullovers', '10-12', '16kg'),
+      ex('Snatches — left', '8-10 crisp reps', '16kg'),
+      ex('Snatches — right', '8-10 crisp reps', '16kg'),
+      ex('Half-kneeling press — alternating', '6-8 each side', '16kg'),
+      ex('Dual kettlebell cleans', '6-8', '16kg + 16kg'),
+      ex('Helicopters', '30-40 sec reset', '12kg'),
+      ex('Halos', '10 alternating', '20kg'),
+      ex('Around the Worlds', 'controlled, not frantic', '20-24kg'),
+      ex('Windmills', '4-5 each side, slow', '16kg')
+    ]
   }
 ];
 
@@ -113,6 +140,7 @@ let currentIndex = 0;
 let secondsLeft = WORK_SECONDS;
 let interval = null;
 let paused = false;
+let awaitingNext = false;
 let wakeLock = null;
 let session = null;
 let voiceEnabled = localStorage.getItem(VOICE_KEY) !== 'off';
@@ -206,11 +234,14 @@ function buildSteps(program) {
 function startWorkout() {
   if (!selectedProgram) return;
   steps = buildSteps(selectedProgram);
+  const firstWork = steps.find(step => step.type === 'work');
+  if (firstWork) steps.unshift({ type: 'prep', seconds: PREP_SECONDS, label: 'Get ready', exercise: firstWork.exercise });
   currentIndex = 0;
   session = { program: selectedProgram, startedAt: new Date(), events: [], completed: false };
   els.setup.classList.add('hidden');
   els.summary.classList.add('hidden');
   els.workout.classList.remove('hidden');
+  document.body.classList.add('is-working');
   requestWakeLock();
   showStep();
   startTimer();
@@ -221,16 +252,19 @@ function showStep() {
   if (!step) return finishWorkout(false);
   secondsLeft = step.seconds;
   const isWork = step.type === 'work';
+  const isPrep = step.type === 'prep';
+  awaitingNext = false;
   lastSpokenSecond = null;
   els.stepLabel.textContent = step.label;
-  els.exerciseName.textContent = isWork ? step.exercise.name : step.type === 'roundRest' ? 'Rest' : 'Transition';
-  els.exerciseDetails.textContent = isWork ? `${step.exercise.reps} · ${step.exercise.weight}` : step.type === 'roundRest' ? '1 minute. Breathe. Do not negotiate with the bell.' : 'Set up the next movement.';
+  els.exerciseName.textContent = isWork ? step.exercise.name : isPrep ? 'Get ready' : step.type === 'roundRest' ? 'Rest' : 'Transition';
+  els.exerciseDetails.textContent = isWork ? `${step.exercise.reps} · ${step.exercise.weight}` : isPrep ? `First: ${step.exercise.name} — ${step.exercise.reps}, ${step.exercise.weight}` : step.type === 'roundRest' ? '1 minute. Breathe. Do not negotiate with the bell.' : 'Set up the next movement.';
   updateExerciseImage(step);
-  els.phaseLabel.textContent = isWork ? 'WORK' : 'REST';
-  els.phaseLabel.classList.toggle('rest', !isWork);
-  els.progressText.textContent = `${currentIndex + 1} / ${steps.length}`;
-  els.nextBtn.textContent = currentIndex === steps.length - 1 ? 'Finish' : 'Skip / next';
-  els.pauseBtn.disabled = false;
+  els.phaseLabel.textContent = isWork ? 'WORK' : isPrep ? 'STARTING' : 'REST';
+  els.phaseLabel.classList.toggle('rest', !isWork && !isPrep);
+  els.phaseLabel.classList.toggle('prep', isPrep);
+  els.progressText.textContent = isPrep ? 'Starting in 5' : `${currentIndex} / ${steps.length - 1}`;
+  els.nextBtn.textContent = isWork ? 'Done / start rest' : isPrep ? 'Skip countdown' : currentIndex === steps.length - 1 ? 'Finish' : 'Skip rest / next';
+  els.pauseBtn.disabled = isPrep;
   renderTimer();
   renderElapsedTimer();
   logEvent('step_start', step);
@@ -240,14 +274,19 @@ function showStep() {
 function startTimer() {
   clearInterval(interval);
   paused = false;
+  awaitingNext = false;
   els.pauseBtn.textContent = 'Pause';
   interval = setInterval(() => {
     renderElapsedTimer();
-    if (paused) return;
+    if (paused || awaitingNext) return;
     secondsLeft -= 1;
     renderTimer();
     maybeSpeakCountdown();
-    if (secondsLeft <= 0) advanceStep(true);
+    if (secondsLeft <= 0) {
+      const step = steps[currentIndex];
+      if (step?.type === 'work') waitForRestStart();
+      else advanceStep(true);
+    }
   }, 1000);
 }
 
@@ -257,12 +296,27 @@ function renderElapsedTimer() {
   els.elapsedTimer.textContent = `Elapsed ${duration(session.startedAt, new Date())}`;
 }
 
+function waitForRestStart() {
+  const step = steps[currentIndex];
+  awaitingNext = true;
+  clearInterval(interval);
+  interval = null;
+  secondsLeft = 0;
+  renderTimer();
+  els.nextBtn.textContent = currentIndex === steps.length - 1 ? 'Finish' : 'Start rest';
+  els.pauseBtn.disabled = true;
+  setStatus('Work done — click Next to start rest');
+  logEvent('work_timer_done_waiting', step);
+  speak('Work done. Click next for rest.', true);
+}
+
 function advanceStep(auto = false) {
   const step = steps[currentIndex];
   if (step) logEvent(auto ? 'step_auto_done' : 'step_manual_done', step);
   currentIndex += 1;
   if (currentIndex >= steps.length) return finishWorkout(false);
   showStep();
+  if (!interval) startTimer();
 }
 
 function togglePause() {
@@ -283,13 +337,16 @@ function toggleVoice() {
 
 function updateExerciseImage(step) {
   if (!els.exerciseImage || !els.exerciseArt) return;
-  const activeWork = step.type === 'work' ? step : null;
-  const upcomingWork = activeWork || steps.slice(currentIndex + 1).find(s => s.type === 'work');
-  const name = upcomingWork?.exercise?.name || 'Kettlebell exercise';
-  const src = imageForExercise(name);
-  els.exerciseImage.src = src;
+  const nextWork = step.type === 'work' || step.type === 'prep' ? step : steps.slice(currentIndex + 1).find(s => s.type === 'work');
+  const name = nextWork?.exercise?.name || '';
+  const match = exerciseImages.find(([pattern]) => pattern.test(name));
+  if (!match) {
+    els.exerciseArt.classList.add('hidden');
+    els.exerciseImage.removeAttribute('src');
+    return;
+  }
+  els.exerciseImage.src = match[1];
   els.exerciseImage.alt = name;
-  els.exerciseArt.classList.toggle('rest-preview', !activeWork);
   els.exerciseArt.classList.remove('hidden');
 }
 
@@ -308,6 +365,7 @@ function finishWorkout(early) {
   releaseWakeLock();
   addHistory({ programId: session.program.id, date: isoDate(session.startedAt) });
   els.workout.classList.add('hidden');
+  document.body.classList.remove('is-working');
   els.summary.classList.remove('hidden');
   els.summaryText.value = makeSummary(session, early);
   setStatus(early ? 'Ended early' : 'Done');
@@ -322,7 +380,7 @@ function makeSummary(s, early) {
     roundStarts[r] ||= new Date(e.time);
     roundEnds[r] = new Date(e.time);
   }
-  const doneEvents = s.events.filter(e => e.event.includes('done') && e.step?.type === 'work');
+  const doneEvents = s.events.filter(e => e.event.includes('done'));
   for (const e of doneEvents) {
     const r = e.step?.round == null ? null : String(e.step.round);
     if (r) roundEnds[r] = new Date(e.time);
@@ -393,6 +451,7 @@ async function copySummary() {
 
 function newSession() {
   session = null;
+  document.body.classList.remove('is-working');
   els.summary.classList.add('hidden');
   els.setup.classList.remove('hidden');
   clearChoice();
@@ -408,14 +467,18 @@ function addHistory(item) {
 function setStatus(text) { els.status.textContent = text; }
 
 function speakStep(step) {
-  if (step.type === 'work') {
-    speak(`${cleanSpeech(step.exercise.name)}. ${step.seconds} seconds.`);
+  if (step.type === 'prep') {
+    const e = step.exercise;
+    speak(`Get ready. First: ${cleanSpeech(e.name)}. Starting in five.`);
+  } else if (step.type === 'work') {
+    const e = step.exercise;
+    speak(`${step.label}. ${cleanSpeech(e.name)}. ${e.reps}. ${cleanSpeech(e.weight)}.`);
   } else if (step.type === 'roundRest') {
-    speak(`Rest. ${step.seconds} seconds.`);
+    speak(`${step.label}. Rest one minute.`);
   } else {
     const next = steps[currentIndex + 1];
-    if (next?.type === 'work') speak(`Rest. ${step.seconds} seconds. Next: ${cleanSpeech(next.exercise.name)}.`);
-    else speak(`Rest. ${step.seconds} seconds.`);
+    if (next?.type === 'work') speak(`Transition. Next: ${cleanSpeech(next.exercise.name)}.`);
+    else speak('Transition.');
   }
 }
 

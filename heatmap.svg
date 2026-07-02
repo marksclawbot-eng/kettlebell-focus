@@ -1,14 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="760" height="338" viewBox="0 0 760 338" role="img" aria-labelledby="title desc">
 <style><![CDATA[.bg{fill:#0b1120}.text{fill:#e5e7eb;font:700 24px system-ui,-apple-system,Segoe UI,sans-serif}.muted{fill:#9ca3af;font:500 15px system-ui,-apple-system,Segoe UI,sans-serif}.tiny{fill:#9ca3af;font:600 13px system-ui,-apple-system,Segoe UI,sans-serif}.cell{stroke:#111827;stroke-width:1}.month{fill:#cbd5e1;font:700 13px system-ui,-apple-system,Segoe UI,sans-serif}]]></style>
 <title id="title">Kettlebell calendar heat map</title>
-<desc id="desc">22 sessions across 22 active days from 2026-04-03 to 2026-06-25.</desc>
+<desc id="desc">25 sessions across 25 active days from 2026-04-03 to 2026-07-02.</desc>
 <rect class="bg" width="760" height="338" rx="18"/>
 <text class="text" x="24" y="34">Kettlebell consistency</text>
-<text class="muted" x="24" y="62">2026-04-03 → 2026-06-25</text>
-<text class="muted" x="24" y="84">22 sessions · 22 active days</text>
+<text class="muted" x="24" y="62">2026-04-03 → 2026-07-02</text>
+<text class="muted" x="24" y="84">25 sessions · 25 active days</text>
 <text class="month" x="72" y="94">Apr</text>
 <text class="month" x="160" y="94">May</text>
 <text class="month" x="270" y="94">Jun</text>
+<text class="month" x="358" y="94">Jul</text>
 <text class="tiny" x="24" y="125">Mon</text>
 <text class="tiny" x="24" y="147">Tue</text>
 <text class="tiny" x="24" y="169">Wed</text>
@@ -104,9 +105,16 @@
 <rect class="cell" x="336" y="134" width="18" height="18" rx="4" fill="#1f2937" opacity="1"><title>2026-06-23: 0 session(s); none</title></rect>
 <rect class="cell" x="336" y="156" width="18" height="18" rx="4" fill="#22c55e" opacity="1"><title>2026-06-24: 1 session(s); push_pull</title></rect>
 <rect class="cell" x="336" y="178" width="18" height="18" rx="4" fill="#1f2937" opacity="1"><title>2026-06-25: 0 session(s); none</title></rect>
-<rect class="cell" x="336" y="200" width="18" height="18" rx="4" fill="#1f2937" opacity="0.35"><title>2026-06-26: 0 session(s); none</title></rect>
-<rect class="cell" x="336" y="222" width="18" height="18" rx="4" fill="#1f2937" opacity="0.35"><title>2026-06-27: 0 session(s); none</title></rect>
-<rect class="cell" x="336" y="244" width="18" height="18" rx="4" fill="#1f2937" opacity="0.35"><title>2026-06-28: 0 session(s); none</title></rect>
+<rect class="cell" x="336" y="200" width="18" height="18" rx="4" fill="#1f2937" opacity="1"><title>2026-06-26: 0 session(s); none</title></rect>
+<rect class="cell" x="336" y="222" width="18" height="18" rx="4" fill="#22c55e" opacity="1"><title>2026-06-27: 1 session(s); balanced_full_body</title></rect>
+<rect class="cell" x="336" y="244" width="18" height="18" rx="4" fill="#1f2937" opacity="1"><title>2026-06-28: 0 session(s); none</title></rect>
+<rect class="cell" x="358" y="112" width="18" height="18" rx="4" fill="#1f2937" opacity="1"><title>2026-06-29: 0 session(s); none</title></rect>
+<rect class="cell" x="358" y="134" width="18" height="18" rx="4" fill="#22c55e" opacity="1"><title>2026-06-30: 1 session(s); knee_cautious_legs_core</title></rect>
+<rect class="cell" x="358" y="156" width="18" height="18" rx="4" fill="#1f2937" opacity="1"><title>2026-07-01: 0 session(s); none</title></rect>
+<rect class="cell" x="358" y="178" width="18" height="18" rx="4" fill="#22c55e" opacity="1"><title>2026-07-02: 1 session(s); athletic_power_capped</title></rect>
+<rect class="cell" x="358" y="200" width="18" height="18" rx="4" fill="#1f2937" opacity="0.35"><title>2026-07-03: 0 session(s); none</title></rect>
+<rect class="cell" x="358" y="222" width="18" height="18" rx="4" fill="#1f2937" opacity="0.35"><title>2026-07-04: 0 session(s); none</title></rect>
+<rect class="cell" x="358" y="244" width="18" height="18" rx="4" fill="#1f2937" opacity="0.35"><title>2026-07-05: 0 session(s); none</title></rect>
 <rect class="cell" x="72" y="286" width="18" height="18" rx="4" fill="#1f2937"/>
 <text class="muted" x="100" y="300">No workout</text>
 <rect class="cell" x="214" y="286" width="18" height="18" rx="4" fill="#22c55e"/>

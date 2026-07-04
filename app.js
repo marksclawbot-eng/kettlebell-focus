@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-06-25-no-progress-v1';
+const APP_VERSION = '2026-07-04-upper-core-swings-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -45,12 +45,12 @@ const programs = [
     focus: 'Low hinge, low knee stress; recovery-compatible upper/core work',
     rounds: 2,
     exercises: [
+      ex('Swings', '18-22', '24kg'),
       ex('Push-ups', '12-15', 'BW'),
       ex('Half-kneeling press — left', '8-10', '16kg'),
       ex('Half-kneeling press — right', '8-10', '16kg'),
       ex('Supported single-arm row — left', '10-12', '20kg'),
       ex('Supported single-arm row — right', '10-12', '20kg'),
-      ex('Helicopters', '30-40 sec controlled', '12kg'),
       ex('Pullovers', '10-12', '16kg'),
       ex('Halos', '10 alternating', '20kg'),
       ex('Windmills', '4-5 each side, slow', '16kg'),

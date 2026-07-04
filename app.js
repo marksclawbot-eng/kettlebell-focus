@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-07-04-upper-core-swings-v1';
+const APP_VERSION = '2026-07-04-ballistic-gorilla-rows-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -68,11 +68,11 @@ const programs = [
       ex('Snatches — left', '10-12', '16kg'),
       ex('Snatches — right', '10-12', '16kg'),
       ex('Halos', '10 alternating', '20kg'),
-      ex('Goblet squats', '8-10, knee-friendly depth', '20kg')
+      ex('Gorilla rows', '8-10 each side, controlled', '16kg')
     ],
     finisher: [
       ex('Around the Worlds', 'easy controlled rhythm', '20-24kg'),
-      ex('Goblet squats', '8-10 controlled', '20kg')
+      ex('Gorilla rows', '8-10 each side, controlled', '16kg')
     ]
   },
   {

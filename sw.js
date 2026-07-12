@@ -1,5 +1,5 @@
-const CACHE = 'kb-focus-v12-ballistic-gorilla-rows-2026-07-04';
-const ASSETS = ['./', './index.html', './styles.css?v=2026-07-04-ballistic-gorilla-rows', './app.js?v=2026-07-04-ballistic-gorilla-rows', './manifest.webmanifest', './icons/icon-192.svg', './icons/icon-512.svg', './assets/01_swing_focus.jpg', './assets/02_rack_focus.jpg', './assets/03_press_focus.jpg', './assets/04_windmill_focus.jpg', './assets/05_deadlift_focus.jpg', './assets/06_goblet_squat_focus.jpg', './assets/07_renegade_row_focus.jpg', './assets/08_around_the_world_focus.jpg', './assets/09_overhead_hold_focus.jpg', './assets/10_bent_over_row_focus.jpg', './heatmap.svg', './heatmap.html'];
+const CACHE = 'kb-focus-v13-heatmap-refresh-2026-07-12';
+const ASSETS = ['./', './index.html', './styles.css?v=2026-07-12-heatmap-refresh', './app.js?v=2026-07-12-heatmap-refresh', './manifest.webmanifest', './icons/icon-192.svg', './icons/icon-512.svg', './assets/01_swing_focus.jpg', './assets/02_rack_focus.jpg', './assets/03_press_focus.jpg', './assets/04_windmill_focus.jpg', './assets/05_deadlift_focus.jpg', './assets/06_goblet_squat_focus.jpg', './assets/07_renegade_row_focus.jpg', './assets/08_around_the_world_focus.jpg', './assets/09_overhead_hold_focus.jpg', './assets/10_bent_over_row_focus.jpg', './heatmap.svg', './heatmap.html'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

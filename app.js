@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-07-12-rows-24kg-v1';
+const APP_VERSION = '2026-07-12-windmills-12kg-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -35,7 +35,7 @@ const programs = [
       ex('Deadlifts / KB deadlifts', '8-10 controlled', '44kg'),
       ex('Clean & Jerk — left', '8-10 crisp reps', '20kg'),
       ex('Clean & Jerk — right', '8-10 crisp reps', '20kg'),
-      ex('Windmills', '4-5 each side, slow', '16kg'),
+      ex('Windmills', '4-5 each side, slow', '12kg'),
       ex('Figure 8s', '12-16 alternating, easy rhythm', '20kg')
     ]
   },
@@ -53,7 +53,7 @@ const programs = [
       ex('Single-arm row — right', '10-12', '24kg'),
       ex('Pullovers', '10-12', '16kg'),
       ex('Halos', '10 alternating', '20kg'),
-      ex('Windmills', '4-5 each side, slow', '16kg'),
+      ex('Windmills', '4-5 each side, slow', '12kg'),
       ex('Goblet squats', '8-10 controlled', '20kg')
     ]
   },
@@ -89,7 +89,7 @@ const programs = [
       ex('Half-kneeling press — right', '8-10', '12kg'),
       ex('Helicopters', '30-40 sec controlled', '12kg'),
       ex('Halos', '10 alternating', '20kg'),
-      ex('Windmills', '4-5 each side, slow', '16kg'),
+      ex('Windmills', '4-5 each side, slow', '12kg'),
       ex('Figure 8s', '12-16 alternating, easy rhythm', '16-20kg')
     ]
   },

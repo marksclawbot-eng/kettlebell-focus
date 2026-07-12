@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-07-12-presses-12kg-v1';
+const APP_VERSION = '2026-07-12-rows-24kg-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -49,8 +49,8 @@ const programs = [
       ex('Push-ups', '12-15', 'BW'),
       ex('Half-kneeling press — left', '8-10', '12kg'),
       ex('Half-kneeling press — right', '8-10', '12kg'),
-      ex('Single-arm row — left', '10-12', '20kg'),
-      ex('Single-arm row — right', '10-12', '20kg'),
+      ex('Single-arm row — left', '10-12', '24kg'),
+      ex('Single-arm row — right', '10-12', '24kg'),
       ex('Pullovers', '10-12', '16kg'),
       ex('Halos', '10 alternating', '20kg'),
       ex('Windmills', '4-5 each side, slow', '16kg'),
@@ -68,11 +68,11 @@ const programs = [
       ex('Snatches — left', '10-12', '16kg'),
       ex('Snatches — right', '10-12', '16kg'),
       ex('Two arm press', '8-10 controlled', '12kg'),
-      ex('Gorilla rows', '8-10 each side, controlled', '16kg')
+      ex('Gorilla rows', '8-10 each side, controlled', '24kg')
     ],
     finisher: [
       ex('Around the Worlds', 'easy controlled rhythm', '20-24kg'),
-      ex('Gorilla rows', '8-10 each side, controlled', '16kg')
+      ex('Gorilla rows', '8-10 each side, controlled', '24kg')
     ]
   },
   {

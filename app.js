@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-07-12-windmills-12kg-v1';
+const APP_VERSION = '2026-07-12-shoulder-crusher-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -77,7 +77,7 @@ const programs = [
   },
   {
     id: 'knee_cautious_legs_core',
-    name: 'Knee-Cautious Legs + Core',
+    name: 'Shoulder Crusher',
     focus: 'Legs without making knees or low back the tax collector',
     rounds: 2,
     exercises: [

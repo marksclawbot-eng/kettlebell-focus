@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-07-12-sheet-sync-v1';
+const APP_VERSION = '2026-07-12-presses-12kg-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -47,8 +47,8 @@ const programs = [
     exercises: [
       ex('Swings', '18-22', '24kg'),
       ex('Push-ups', '12-15', 'BW'),
-      ex('Half-kneeling press — left', '8-10', '16kg'),
-      ex('Half-kneeling press — right', '8-10', '16kg'),
+      ex('Half-kneeling press — left', '8-10', '12kg'),
+      ex('Half-kneeling press — right', '8-10', '12kg'),
       ex('Single-arm row — left', '10-12', '20kg'),
       ex('Single-arm row — right', '10-12', '20kg'),
       ex('Pullovers', '10-12', '16kg'),
@@ -67,7 +67,7 @@ const programs = [
       ex('Push-ups', '12-15', 'BW'),
       ex('Snatches — left', '10-12', '16kg'),
       ex('Snatches — right', '10-12', '16kg'),
-      ex('Two arm press', '8-10 controlled', '16kg'),
+      ex('Two arm press', '8-10 controlled', '12kg'),
       ex('Gorilla rows', '8-10 each side, controlled', '16kg')
     ],
     finisher: [
@@ -85,8 +85,8 @@ const programs = [
       ex('Kettlebell racked lunge — left', '5-7', '16kg'),
       ex('Kettlebell racked lunge — right', '5-7', '16kg'),
       ex('Helicopters', '30-40 sec controlled', '12kg'),
-      ex('Half-kneeling press — left', '8-10', '16kg'),
-      ex('Half-kneeling press — right', '8-10', '16kg'),
+      ex('Half-kneeling press — left', '8-10', '12kg'),
+      ex('Half-kneeling press — right', '8-10', '12kg'),
       ex('Helicopters', '30-40 sec controlled', '12kg'),
       ex('Halos', '10 alternating', '20kg'),
       ex('Windmills', '4-5 each side, slow', '16kg'),
@@ -121,8 +121,8 @@ const programs = [
       ex('Pullovers', '10-12', '16kg'),
       ex('Snatches — left', '8-10 crisp reps', '16kg'),
       ex('Snatches — right', '8-10 crisp reps', '16kg'),
-      ex('Half-kneeling press — left', '8-10', '16kg'),
-      ex('Half-kneeling press — right', '8-10', '16kg'),
+      ex('Half-kneeling press — left', '8-10', '12kg'),
+      ex('Half-kneeling press — right', '8-10', '12kg'),
       ex('Dual kettlebell cleans', '6-8', '16kg + 16kg'),
       ex('Helicopters', '30-40 sec reset', '12kg'),
       ex('Halos', '10 alternating', '20kg'),

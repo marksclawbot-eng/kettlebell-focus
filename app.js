@@ -5,7 +5,7 @@ const PREP_SECONDS = 5;
 const HISTORY_KEY = 'kbFocusHistory';
 const VOICE_KEY = 'kbFocusVoice';
 
-const APP_VERSION = '2026-07-04-ballistic-gorilla-rows-v1';
+const APP_VERSION = '2026-07-12-sheet-sync-v1';
 
 const exerciseImages = [
   [/swing/i, './assets/01_swing_focus.jpg'],
@@ -49,8 +49,8 @@ const programs = [
       ex('Push-ups', '12-15', 'BW'),
       ex('Half-kneeling press — left', '8-10', '16kg'),
       ex('Half-kneeling press — right', '8-10', '16kg'),
-      ex('Supported single-arm row — left', '10-12', '20kg'),
-      ex('Supported single-arm row — right', '10-12', '20kg'),
+      ex('Single-arm row — left', '10-12', '20kg'),
+      ex('Single-arm row — right', '10-12', '20kg'),
       ex('Pullovers', '10-12', '16kg'),
       ex('Halos', '10 alternating', '20kg'),
       ex('Windmills', '4-5 each side, slow', '16kg'),
@@ -67,7 +67,7 @@ const programs = [
       ex('Push-ups', '12-15', 'BW'),
       ex('Snatches — left', '10-12', '16kg'),
       ex('Snatches — right', '10-12', '16kg'),
-      ex('Halos', '10 alternating', '20kg'),
+      ex('Two arm press', '8-10 controlled', '16kg'),
       ex('Gorilla rows', '8-10 each side, controlled', '16kg')
     ],
     finisher: [
@@ -81,12 +81,12 @@ const programs = [
     focus: 'Legs without making knees or low back the tax collector',
     rounds: 2,
     exercises: [
-      ex('Light technique swings', '15-18 crisp reps', '16-20kg'),
+      ex('Swings', '15-18 crisp reps', '24kg'),
       ex('Kettlebell racked lunge — left', '5-7', '16kg'),
       ex('Kettlebell racked lunge — right', '5-7', '16kg'),
       ex('Helicopters', '30-40 sec controlled', '12kg'),
-      ex('Supported single-arm row — left', '10-12', '20kg'),
-      ex('Supported single-arm row — right', '10-12', '20kg'),
+      ex('Half-kneeling press — left', '8-10', '16kg'),
+      ex('Half-kneeling press — right', '8-10', '16kg'),
       ex('Helicopters', '30-40 sec controlled', '12kg'),
       ex('Halos', '10 alternating', '20kg'),
       ex('Windmills', '4-5 each side, slow', '16kg'),
@@ -99,11 +99,11 @@ const programs = [
     focus: 'Heavier strength exposure without enough hinge density to wreck the back',
     rounds: 3,
     exercises: [
-      ex('Deadlifts / KB deadlifts', '8-10 controlled', '44kg'),
+      ex('Swings', '18-22', '24kg'),
       ex('Push-ups', '12-15', 'BW'),
       ex('Goblet squats', '8-10, knee-friendly depth', '20kg'),
       ex('Dual kettlebell cleans', '6-8 crisp', '16kg + 16kg'),
-      ex('Renegade rows', '4-6 each side, strict', '16kg + 16kg'),
+      ex('Deadlifts / KB deadlifts', '8-10 controlled', '44kg'),
       ex('Figure 8s', '12-16 alternating, easy rhythm', '16-20kg')
     ],
     finisher: [
@@ -121,12 +121,12 @@ const programs = [
       ex('Pullovers', '10-12', '16kg'),
       ex('Snatches — left', '8-10 crisp reps', '16kg'),
       ex('Snatches — right', '8-10 crisp reps', '16kg'),
-      ex('Half-kneeling press — alternating', '6-8 each side', '16kg'),
+      ex('Half-kneeling press — left', '8-10', '16kg'),
+      ex('Half-kneeling press — right', '8-10', '16kg'),
       ex('Dual kettlebell cleans', '6-8', '16kg + 16kg'),
       ex('Helicopters', '30-40 sec reset', '12kg'),
       ex('Halos', '10 alternating', '20kg'),
-      ex('Around the Worlds', 'controlled, not frantic', '20-24kg'),
-      ex('Windmills', '4-5 each side, slow', '16kg')
+      ex('Around the Worlds', 'controlled, not frantic', '20-24kg')
     ]
   }
 ];
